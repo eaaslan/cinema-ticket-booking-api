@@ -1,5 +1,4 @@
 package cinema;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
-
 }
 
 @RestController
@@ -39,10 +37,6 @@ private final List<Seat> seats ;
 
     @GetMapping("/seats")
     public SeatsResponse getSeats() {
-
-
-
-
         return new SeatsResponse(ROWS, COLUMNS, seats);
     }
 
@@ -52,20 +46,21 @@ private final List<Seat> seats ;
         int row = seatRequest.getRow();
         int column = seatRequest.getColumn();
 
+
         if (row < 1 || row > ROWS || column < 1 || column > COLUMNS) {
-            return ResponseEntity.badRequest().body(new Error("The number of a row or a column is out of bounds!"));
+            ErrorResponse error = new ErrorResponse("The number of a row or a column is out of bounds!");
+            return ResponseEntity.badRequest().body(error);
         }
 
         Seat seat = findSeat(row, column);
 
         if (seat.isBooked()) {
-            return ResponseEntity.badRequest().body(new Error("The ticket has been already purchased!"));
+            ErrorResponse error = new ErrorResponse("The ticket has been already purchased!");
+            return ResponseEntity.badRequest().body(error);
         }
 
         seat.setBooked(true);
         return ResponseEntity.ok(seat);
-
-
 
     }
 

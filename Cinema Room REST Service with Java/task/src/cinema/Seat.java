@@ -1,9 +1,12 @@
 package cinema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Seat {
     private int row;
     private int column;
     private int price;
+    @JsonIgnore
     private boolean isBooked = false;
 
     public Seat(int row, int column) {
@@ -36,6 +39,11 @@ public class Seat {
         this.isBooked = b;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    @JsonIgnore
     public boolean isBooked() {
         return isBooked;
     }

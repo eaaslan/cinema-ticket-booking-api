@@ -25,18 +25,8 @@ files:
     visible: true
     learner_created: true
 feedback_link: https://hyperskill.org/learn/step/13376#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #2
-
-    The JSON object at key seats has an incorrect length: should be equal to 81, found 0
-
-    Full JSON:
-    {
-      &quot;rows&quot;: 9,
-      &quot;columns&quot;: 9,
-      &quot;seats&quot;: []
-    }
-  time: "Wed, 17 Jul 2024 08:39:27 UTC"
+  message: Congratulations!
+  time: "Wed, 17 Jul 2024 09:52:03 UTC"
 record: -1
