@@ -4,8 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 public class Main {
@@ -20,6 +19,9 @@ class ApiController{
 private static final int ROWS = 9;
 private static final int COLUMNS = 9;
 private final List<Seat> seats ;
+private final Map<String,Seat> tokenToSeat = new HashMap<>();
+
+
 
 
     public ApiController() {
@@ -60,8 +62,31 @@ private final List<Seat> seats ;
         }
 
         seat.setBooked(true);
-        return ResponseEntity.ok(seat);
+        UUID uuid = UUID.randomUUID();
+        Token token = new Token(uuid.toString());
 
+        tokenToSeat.put(uuid.toString(),seat);
+        TicketWithToken ticketWithToken = new TicketWithToken(seat,token.getToken());
+        return ResponseEntity.ok(ticketWithToken);
+
+    }
+
+    @PostMapping("/return")
+    public ResponseEntity<?>returnTicket(@RequestBody Token token) {
+
+        Seat seat = tokenToSeat.remove(token.getToken());
+
+
+        if (seat == null) {
+            ErrorResponse error = new ErrorResponse("Wrong token!");
+            return ResponseEntity.badRequest().body(error);
+        }
+        seat.setBooked(false);
+
+        Map<String,Seat> response = new HashMap<>();
+        response.put("ticket" , seat)   ;
+
+        return ResponseEntity.ok(response);
     }
 
     public Seat findSeat(int row, int column) {

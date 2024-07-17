@@ -16,8 +16,6 @@ public class Seat {
         this.isBooked = false;
     }
 
-
-
     // Getters and setters
     public int getRow() {
         return row;
