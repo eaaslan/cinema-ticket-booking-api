@@ -1,6 +1,7 @@
 package cinema;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +23,11 @@ private final List<Seat> seats ;
 private final Map<String,Seat> tokenToSeat = new HashMap<>();
 
 
-
-
-    public ApiController() {
+public ApiController() {
         this.seats = initializeSeats();
-    }
+        Statistics.initializeSeats(ROWS * COLUMNS);
+
+}
     private List<Seat> initializeSeats() {
         List<Seat> seats = new ArrayList<>();
         for (int i = 1; i <= ROWS; i++) {
@@ -64,9 +65,9 @@ private final Map<String,Seat> tokenToSeat = new HashMap<>();
         seat.setBooked(true);
         UUID uuid = UUID.randomUUID();
         Token token = new Token(uuid.toString());
-
         tokenToSeat.put(uuid.toString(),seat);
         TicketWithToken ticketWithToken = new TicketWithToken(seat,token.getToken());
+        Statistics.updateOnPurchase(seat.getPrice());
         return ResponseEntity.ok(ticketWithToken);
 
     }
@@ -82,12 +83,28 @@ private final Map<String,Seat> tokenToSeat = new HashMap<>();
             return ResponseEntity.badRequest().body(error);
         }
         seat.setBooked(false);
+        Statistics.updateOnReturn(seat.getPrice());
 
         Map<String,Seat> response = new HashMap<>();
         response.put("ticket" , seat)   ;
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> getStats(@RequestParam(required = false) String password) {
+        if (password == null || !password.equals("super_secret")) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "The password is wrong!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+        }
+
+        return ResponseEntity.ok(Statistics.getStatistics());
+    }
+
+
+
+
 
     public Seat findSeat(int row, int column) {
         return seats.stream()
