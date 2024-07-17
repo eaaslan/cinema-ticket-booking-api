@@ -1,0 +1,11 @@
+type: unsupported
+files:
+  - name: src/Task.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/32999#comment
+status: Unchecked
+feedback:
+  message: Solution is not found on Hyperskill. Solve the task in browser first
+  time: "Tue, 16 Jul 2024 07:59:59 UTC"
+record: -1

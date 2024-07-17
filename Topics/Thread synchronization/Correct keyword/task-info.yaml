@@ -1,0 +1,20 @@
+type: choice
+is_multiple_choice: false
+options:
+  - text: protected
+  - text: mutex
+  - text: volatile
+  - text: synchronized
+files:
+  - name: src/Task.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/36491#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: "Tue, 16 Jul 2024 07:10:54 UTC"
+record: -1
+selected_options:
+  - 3
+local_check: false
